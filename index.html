@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MiniStore - Secure App Store & Game Portal</title>
+    <title>AuraVexis - Secure App Store & Game Portal</title>
+    <!-- PWA Manifest Link -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4f46e5">
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome -->
@@ -37,8 +40,8 @@
                 <i class="fa-solid fa-gamepad text-base sm:text-lg"></i>
             </div>
             <div class="flex items-center space-x-1.5">
-                <span class="text-lg sm:text-xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-600 to-violet-500 bg-clip-text text-transparent">MiniStore</span>
-                <span class="text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400">Secure</span>
+                <span class="text-lg sm:text-xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-600 to-violet-500 bg-clip-text text-transparent">AuraVexis</span>
+                <span class="text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400">Store</span>
             </div>
         </div>
 
@@ -52,21 +55,24 @@
         </div>
 
         <div class="flex items-center space-x-2 shrink-0">
-            <button onclick="switchTab('store')" id="btn-store" class="px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition flex items-center space-x-1.5 bg-indigo-600 text-white shadow-sm">
+            <!-- Install App Button (PWA) -->
+            <button type="button" id="installAppBtn" onclick="installPWAApp()" class="hidden px-3 py-2 rounded-full text-xs font-medium transition items-center space-x-1.5 bg-emerald-600 text-white shadow-sm hover:bg-emerald-700" title="Install App">
+                <i class="fa-solid fa-download"></i><span class="hidden sm:inline">Install App</span>
+            </button>
+
+            <button type="button" onclick="switchTab('store')" id="btn-store" class="px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition flex items-center space-x-1.5 bg-indigo-600 text-white shadow-sm">
                 <i class="fa-solid fa-store"></i><span class="hidden xs:inline">Store</span>
             </button>
-            <button onclick="switchTab('upload')" id="btn-upload" class="px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">
+            <button type="button" onclick="switchTab('upload')" id="btn-upload" class="px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">
                 <i class="fa-solid fa-cloud-arrow-up"></i><span class="hidden xs:inline">Upload</span>
             </button>
-            <!-- My Games Tab Button -->
-            <button onclick="switchTab('my-games')" id="btn-my-games" class="px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">
+            <button type="button" onclick="switchTab('my-games')" id="btn-my-games" class="px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700">
                 <i class="fa-solid fa-folder-open"></i><span class="hidden xs:inline">My Games</span>
             </button>
-            <!-- Auth / Profile Avatar Button -->
-            <button onclick="openAuthModal()" id="authToggleBtn" class="px-3 py-2 rounded-full text-xs font-medium transition flex items-center space-x-1 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300" title="Account">
-                <i class="fa-solid fa-user-shield"></i><span id="authStatusText" class="hidden xs:inline">Login / Signup</span>
+            <button type="button" onclick="openAuthModal()" id="authToggleBtn" class="px-3 py-2 rounded-full text-xs font-medium transition flex items-center space-x-1 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300" title="Account">
+                <i class="fa-solid fa-user-shield"></i><span id="authStatusText" class="hidden xs:inline">Login</span>
             </button>
-            <button onclick="toggleTheme()" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition" title="Toggle Theme">
+            <button type="button" onclick="toggleTheme()" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition" title="Toggle Theme">
                 <i id="theme-icon" class="fa-solid fa-moon text-sm"></i>
             </button>
         </div>
@@ -84,11 +90,11 @@
     <div class="header-marquee-box">
         <div class="max-w-7xl mx-auto flex items-center overflow-hidden">
             <span class="bg-white/20 text-white text-[11px] px-2 py-0.5 rounded mr-3 font-bold uppercase tracking-wider flex-shrink-0">
-                <i class="fa-solid fa-lock mr-1"></i> Secure Auth
+                <i class="fa-solid fa-rocket mr-1"></i> Fast & Secure
             </span>
             <div class="overflow-hidden w-full">
                 <marquee behavior="scroll" direction="left" scrollamount="4" class="text-xs sm:text-sm block">
-                    Supabase Row Level Security (RLS) Enabled. Welcome to MiniStore Game Portal!
+                    Welcome to AuraVexis Game Portal! Click 'Install App' in the header to add this store directly to your phone screen.
                 </marquee>
             </div>
         </div>
@@ -104,23 +110,23 @@
                 <span class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/10 backdrop-blur-md border border-white/20 text-indigo-200">
                     <i class="fa-solid fa-bolt text-amber-400"></i><span>Featured Game</span>
                 </span>
-                <h1 id="featuredTitle" class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">MiniStore Games</h1>
-                <p id="featuredDescription" class="text-slate-300 text-xs sm:text-sm">Play your favorite games instantly.</p>
+                <h1 id="featuredTitle" class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">AuraVexis Portal</h1>
+                <p id="featuredDescription" class="text-slate-300 text-xs sm:text-sm">Play your favorite games instantly on any device.</p>
                 <div class="flex flex-wrap gap-3 pt-2">
-                    <button onclick="openFeaturedGame()" class="px-5 py-2.5 bg-white text-indigo-900 rounded-xl font-bold text-xs sm:text-sm hover:bg-indigo-50 transition shadow-lg flex items-center space-x-2">
+                    <button type="button" onclick="openFeaturedGame()" class="px-5 py-2.5 bg-white text-indigo-900 rounded-xl font-bold text-xs sm:text-sm hover:bg-indigo-50 transition shadow-lg flex items-center space-x-2">
                         <i class="fa-solid fa-play text-indigo-600"></i><span>Play Now</span>
                     </button>
-                    <button onclick="switchTab('upload')" class="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl font-semibold text-xs sm:text-sm transition backdrop-blur-md">Upload Your Game</button>
+                    <button type="button" onclick="switchTab('upload')" class="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl font-semibold text-xs sm:text-sm transition backdrop-blur-md">Upload Your Game</button>
                 </div>
             </div>
         </div>
 
         <div class="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none" id="categoryFilters">
-            <button onclick="filterCategory('All')" class="category-btn px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition bg-indigo-600 text-white shadow-sm whitespace-nowrap shrink-0">All</button>
-            <button onclick="filterCategory('Action')" class="category-btn px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 whitespace-nowrap shrink-0">Action</button>
-            <button onclick="filterCategory('Puzzle')" class="category-btn px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 whitespace-nowrap shrink-0">Puzzle</button>
-            <button onclick="filterCategory('Arcade')" class="category-btn px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 whitespace-nowrap shrink-0">Arcade</button>
-            <button onclick="filterCategory('Utility')" class="category-btn px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 whitespace-nowrap shrink-0">Utility</button>
+            <button type="button" onclick="filterCategory('All')" class="category-btn px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition bg-indigo-600 text-white shadow-sm whitespace-nowrap shrink-0">All</button>
+            <button type="button" onclick="filterCategory('Action')" class="category-btn px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 whitespace-nowrap shrink-0">Action</button>
+            <button type="button" onclick="filterCategory('Puzzle')" class="category-btn px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 whitespace-nowrap shrink-0">Puzzle</button>
+            <button type="button" onclick="filterCategory('Arcade')" class="category-btn px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 whitespace-nowrap shrink-0">Arcade</button>
+            <button type="button" onclick="filterCategory('Utility')" class="category-btn px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 whitespace-nowrap shrink-0">Utility</button>
         </div>
 
         <div class="flex justify-between items-center pt-2">
@@ -142,7 +148,7 @@
             </div>
             <h3 class="text-base font-bold text-slate-700 dark:text-slate-300">No games found</h3>
             <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-xs mt-1">The store is empty or no games match your search.</p>
-            <button onclick="switchTab('upload')" class="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs sm:text-sm font-medium shadow hover:bg-indigo-700 transition">Upload Game</button>
+            <button type="button" onclick="switchTab('upload')" class="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs sm:text-sm font-medium shadow hover:bg-indigo-700 transition">Upload Game</button>
         </div>
     </div>
 
@@ -151,7 +157,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">My Uploaded Games</h2>
-                <p class="text-xs sm:text-sm text-slate-500">यहाँ आपको सिर्फ आपके द्वारा अपलोड किए गए गेम्स दिखेंगे, जिन्हें आप मैनेज कर सकते हैं।</p>
+                <p class="text-xs sm:text-sm text-slate-500">यहाँ आपको सिर्फ आपके द्वारा अपलोड किए गए गेम्स दिखेंगे।</p>
             </div>
             <span id="myAppCountBadge" class="text-xs bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 px-3 py-1 rounded-full font-semibold">0 Games</span>
         </div>
@@ -161,21 +167,20 @@
                 <i class="fa-solid fa-folder-closed"></i>
             </div>
             <h3 class="text-base font-bold text-slate-700 dark:text-slate-300">आपने अभी तक कोई गेम अपलोड नहीं किया है</h3>
-            <p class="text-xs sm:text-sm text-slate-500 max-w-xs mt-1">अपना पहला गेम अपलोड करें और वह यहाँ दिखाई देगा।</p>
-            <button onclick="switchTab('upload')" class="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs sm:text-sm font-medium shadow hover:bg-indigo-700 transition">Upload Game</button>
+            <button type="button" onclick="switchTab('upload')" class="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs sm:text-sm font-medium shadow hover:bg-indigo-700 transition">Upload Game</button>
         </div>
     </div>
 
-    <!-- UPLOAD / EDIT SECTION -->
+    <!-- UPLOAD SECTION -->
     <div id="tab-upload" class="hidden max-w-2xl mx-auto space-y-6">
         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
             <div class="flex items-center space-x-4 mb-6 pb-5 border-b border-slate-100 dark:border-slate-800">
-                <div class="w-12 h-12 rounded-2xl bg-indigo-100 dark:bg-indigo-950 flex items-center justify-center text-indigo-600 dark:text-indigo-400 text-xl shrink-0">
+                <div class="w-12 h-12 rounded-2xl bg-indigo-100 dark:bg-indigo-950 flex items-center justify-center text-indigo-600 text-xl shrink-0">
                     <i id="formHeaderIcon" class="fa-solid fa-cloud-arrow-up"></i>
                 </div>
                 <div>
-                    <h2 id="formMainTitle" class="text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-100">Upload New Game / App</h2>
-                    <p id="formSubTitle" class="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Fill in your app details and publish it securely.</p>
+                    <h2 id="formMainTitle" class="text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-100">Upload New Game</h2>
+                    <p id="formSubTitle" class="text-xs sm:text-sm text-slate-500">Publish your web game or app.</p>
                 </div>
             </div>
 
@@ -183,12 +188,12 @@
                 <input type="hidden" id="editAppId" value="">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Game / App Name *</label>
-                        <input type="text" id="appName" required maxlength="100" placeholder="e.g. Space Adventure 3D" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Game / App Name *</label>
+                        <input type="text" id="appName" required maxlength="100" placeholder="e.g. Space Adventure" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Category *</label>
-                        <select id="appCategory" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Category *</label>
+                        <select id="appCategory" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                             <option value="Action">Action</option>
                             <option value="Puzzle">Puzzle</option>
                             <option value="Arcade">Arcade</option>
@@ -199,38 +204,38 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Developer / Creator *</label>
-                        <input type="text" id="appDeveloper" required maxlength="100" placeholder="e.g. Rajesh Studio" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Developer *</label>
+                        <input type="text" id="appDeveloper" required maxlength="100" placeholder="e.g. AuraVexis Studio" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Version</label>
-                        <input type="text" id="appVersion" value="1.0.0" maxlength="30" placeholder="1.0.0" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Version</label>
+                        <input type="text" id="appVersion" value="1.0.0" maxlength="30" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">App Icon Image URL *</label>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">App Icon Image URL *</label>
                     <div class="flex space-x-3 items-center">
-                        <input type="url" id="appIcon" required placeholder="https://example.com/icon.jpg" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="previewThumbnail(this.value)">
-                        <div id="iconPreview" class="w-11 h-11 rounded-xl bg-slate-200 dark:bg-slate-700/80 flex items-center justify-center overflow-hidden shrink-0 border border-slate-300 dark:border-slate-600">
+                        <input type="url" id="appIcon" required placeholder="https://example.com/icon.jpg" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none" oninput="previewThumbnail(this.value)">
+                        <div id="iconPreview" class="w-11 h-11 rounded-xl bg-slate-200 dark:bg-slate-700 flex items-center justify-center overflow-hidden shrink-0 border border-slate-300 dark:border-slate-600">
                             <i class="fa-solid fa-image text-slate-400 text-sm"></i>
                         </div>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Game URL *</label>
-                    <input type="url" id="appGameUrl" required placeholder="https://example.com/game" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Game URL *</label>
+                    <input type="url" id="appGameUrl" required placeholder="https://example.com/game" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                 </div>
 
                 <div>
-                    <label class="block text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Short Description *</label>
-                    <input type="text" id="appShortDesc" required maxlength="120" placeholder="Briefly describe the game..." class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Short Description *</label>
+                    <input type="text" id="appShortDesc" required maxlength="120" placeholder="Briefly describe..." class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
                 </div>
 
                 <div>
-                    <label class="block text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Full Description</label>
-                    <textarea id="appFullDesc" rows="3" maxlength="5000" placeholder="Write details about the game..." class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700/80 bg-slate-50 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Full Description</label>
+                    <textarea id="appFullDesc" rows="3" maxlength="5000" placeholder="Full details..." class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
                 </div>
 
                 <div class="pt-4 flex items-center justify-end space-x-3">
@@ -244,20 +249,46 @@
     </div>
 </main>
 
-<!-- APP MODAL -->
-<div id="appModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+<!-- FULL SCREEN IN-APP GAME PLAYER MODAL -->
+<div id="gamePlayerModal" class="fixed inset-0 z-50 hidden bg-slate-950 flex flex-col">
+    <div class="bg-slate-900 border-b border-slate-800 px-4 py-3 flex items-center justify-between shadow-md">
+        <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white">
+                <i class="fa-solid fa-gamepad text-sm"></i>
+            </div>
+            <div>
+                <h3 id="playerGameTitle" class="text-sm sm:text-base font-bold text-white line-clamp-1">Game Loading...</h3>
+                <span class="text-[10px] text-emerald-400 font-medium flex items-center"><i class="fa-solid fa-circle text-[6px] mr-1"></i> Playing inside AuraVexis</span>
+            </div>
+        </div>
+        <div class="flex items-center space-x-2">
+            <button type="button" onclick="openGameInNewTab()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-semibold transition flex items-center space-x-1" title="Open in browser">
+                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i><span class="hidden xs:inline">Fullscreen / Tab</span>
+            </button>
+            <button type="button" onclick="closeGamePlayer()" class="w-9 h-9 rounded-full bg-rose-600/20 hover:bg-rose-600 text-rose-400 hover:text-white flex items-center justify-center transition" title="Close Game">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+        </div>
+    </div>
+    <div class="flex-1 w-full bg-black relative">
+        <iframe id="gameIframe" src="" class="w-full h-full border-0" allowfullscreen></iframe>
+    </div>
+</div>
+
+<!-- APP DETAIL MODAL -->
+<div id="appModal" class="fixed inset-0 z-40 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
     <div id="modalContentBox" class="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full max-h-[85vh] overflow-y-auto shadow-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-7"></div>
 </div>
 
-<!-- AUTH / LOGIN / SIGNUP MODAL -->
+<!-- AUTH MODAL -->
 <div id="authModal" class="fixed inset-0 z-[65] hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4">
         <div class="flex justify-between items-center">
-            <h3 class="text-base font-bold text-slate-900 dark:text-slate-100" id="authModalTitle">Supabase Account</h3>
-            <button onclick="closeAuthModal()" class="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 flex items-center justify-center"><i class="fa-solid fa-xmark text-xs"></i></button>
+            <h3 class="text-base font-bold text-slate-900 dark:text-slate-100">Supabase Account</h3>
+            <button type="button" onclick="closeAuthModal()" class="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 flex items-center justify-center"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
-        <div id="authFormBody" class="space-y-3">
-            <p class="text-xs text-slate-500">आप यहाँ कोई भी रैंडम ईमेल और पासवर्ड देकर साइन-अप या लॉगिन कर सकते हैं!</p>
+        <div class="space-y-3">
+            <p class="text-xs text-slate-500">लॉगिन या साइन-अप करने के लिए ईमेल और पासवर्ड दें:</p>
             <div>
                 <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Email</label>
                 <input type="email" id="authEmail" placeholder="user@example.com" class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs text-slate-900 dark:text-slate-100 focus:outline-none">
@@ -267,8 +298,8 @@
                 <input type="password" id="authPassword" placeholder="••••••••" class="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs text-slate-900 dark:text-slate-100 focus:outline-none">
             </div>
             <div class="flex space-x-2 pt-2">
-                <button onclick="handleSupabaseSignUp()" class="flex-1 py-2.5 bg-violet-600 hover:bg-violet-700 text-white font-semibold rounded-xl text-xs transition">Sign Up</button>
-                <button onclick="handleSupabaseSignIn()" class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-xs transition">Login</button>
+                <button type="button" onclick="handleSupabaseSignUp()" class="flex-1 py-2.5 bg-violet-600 hover:bg-violet-700 text-white font-semibold rounded-xl text-xs transition">Sign Up</button>
+                <button type="button" onclick="handleSupabaseSignIn()" class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-xs transition">Login</button>
             </div>
         </div>
     </div>
@@ -297,6 +328,30 @@ let searchQuery = '';
 let featuredApp = null;
 let modalCallback = null;
 let currentUser = null;
+let activeGameUrl = '';
+
+// PWA Install Prompt Variable
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    const installBtn = document.getElementById('installAppBtn');
+    if (installBtn) installBtn.classList.remove('hidden');
+});
+
+async function installPWAApp() {
+    if (!deferredPrompt) {
+        showCustomModal('Install App', 'आप अपने मोबाइल ब्राउज़र के मेनू (3 Dots) में जाकर "Add to Home Screen" पर क्लिक करके इसे सीधे अपने फोन में इंस्टॉल कर सकते हैं!');
+        return;
+    }
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+        document.getElementById('installAppBtn').classList.add('hidden');
+    }
+    deferredPrompt = null;
+}
 
 function initializeSupabase() {
     if (!SUPABASE_URL || !window.supabase) return false;
@@ -308,31 +363,30 @@ function initializeSupabase() {
 
 async function checkUserSession() {
     if (!supabaseClient) return;
-    const { data: { session } } = await supabaseClient.auth.getSession();
-    if (session && session.user) {
-        currentUser = session.user;
-        updateAuthUI(true);
-    } else {
-        currentUser = null;
-        updateAuthUI(false);
-    }
+    try {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (session && session.user) {
+            currentUser = session.user;
+            updateAuthUI(true);
+        } else {
+            currentUser = null;
+            updateAuthUI(false);
+        }
+    } catch(e) {}
 }
 
 function updateAuthUI(isLoggedIn) {
     const btn = document.getElementById('authToggleBtn');
+    if (!btn) return;
     if (isLoggedIn && currentUser) {
-        const email = currentUser.email || 'user@ministore.com';
+        const email = currentUser.email || 'user@auravexis.com';
         const coolAvatarUrl = `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(email)}`;
-
         btn.className = 'px-3 py-1.5 rounded-full text-xs font-medium transition flex items-center space-x-1.5 bg-emerald-600/10 dark:bg-emerald-950/40 border border-emerald-500/40 text-emerald-700 dark:text-emerald-300 shadow-sm';
-        btn.innerHTML = `
-            <img src="${coolAvatarUrl}" class="w-6 h-6 rounded-full bg-indigo-100 object-cover shadow-sm" alt="Avatar">
-            <span class="hidden xs:inline font-semibold">Account</span>
-        `;
+        btn.innerHTML = `<img src="${coolAvatarUrl}" class="w-6 h-6 rounded-full bg-indigo-100 object-cover shadow-sm" alt="Avatar"><span class="hidden xs:inline font-semibold">Account</span>`;
         btn.title = "Click to Logout";
     } else {
         btn.className = 'px-3 py-2 rounded-full text-xs font-medium transition flex items-center space-x-1 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300';
-        btn.innerHTML = `<i class="fa-solid fa-user-shield"></i><span class="hidden xs:inline">Login / Signup</span>`;
+        btn.innerHTML = `<i class="fa-solid fa-user-shield"></i><span class="hidden xs:inline">Login</span>`;
         btn.title = "Account";
     }
     renderApps();
@@ -343,15 +397,8 @@ async function loadGames() {
     if (!supabaseClient) { loadAppsFromStorage(); return; }
     try {
         const { data, error } = await supabaseClient.from('apps').select('*').order('created_at', { ascending: false });
-        if (error) {
-            loadAppsFromStorage();
-        } else {
-            apps = Array.isArray(data) ? data : [];
-            saveAppsToStorage();
-        }
-    } catch (e) {
-        loadAppsFromStorage();
-    }
+        if (error) { loadAppsFromStorage(); } else { apps = Array.isArray(data) ? data : []; saveAppsToStorage(); }
+    } catch (e) { loadAppsFromStorage(); }
     featuredApp = apps.length ? apps[0] : null;
     renderFeatured();
     renderApps();
@@ -361,7 +408,7 @@ async function loadGames() {
 
 function loadAppsFromStorage() {
     try {
-        const stored = localStorage.getItem('ministore_apps_v9');
+        const stored = localStorage.getItem('auravexis_apps_v1');
         apps = stored ? JSON.parse(stored) : [];
     } catch (e) { apps = []; }
     featuredApp = apps.length ? apps[0] : null;
@@ -372,13 +419,13 @@ function loadAppsFromStorage() {
 }
 
 function saveAppsToStorage() {
-    try { localStorage.setItem('ministore_apps_v9', JSON.stringify(apps)); } catch (e) {}
+    try { localStorage.setItem('auravexis_apps_v1', JSON.stringify(apps)); } catch (e) {}
 }
 
 async function handleUploadSubmit(event) {
     event.preventDefault();
     if (!currentUser) {
-        showCustomModal('Login Required', 'गेम अपलोड करने के लिए कृपया पहले लॉगिन या साइन-अप करें।');
+        showCustomModal('Login Required', 'गेम अपलोड करने के लिए कृपया पहले लॉगिन करें।');
         openAuthModal();
         return;
     }
@@ -394,32 +441,22 @@ async function handleUploadSubmit(event) {
     const shortDesc = document.getElementById('appShortDesc').value.trim();
     const fullDesc = document.getElementById('appFullDesc').value.trim() || shortDesc;
 
-    const appData = { 
-        name, 
-        category, 
-        developer, 
-        version, 
-        icon, 
-        game_url: gameUrl, 
-        short_desc: shortDesc, 
-        full_desc: fullDesc,
-        user_id: currentUser.id 
-    };
+    const appData = { name, category, developer, version, icon, game_url: gameUrl, short_desc: shortDesc, full_desc: fullDesc, user_id: currentUser.id };
 
     submitButton.disabled = true;
     try {
         if (!supabaseClient) return;
         if (editId) {
             const { error } = await supabaseClient.from('apps').update(appData).eq('id', editId);
-            if (error) { showCustomModal('Error', error.message); return; }
-            showCustomModal('Success', 'Game updated securely.');
+            if (error) { showCustomModal('Error', error.message); submitButton.disabled = false; return; }
+            showCustomModal('Success', 'Game updated successfully.');
         } else {
             appData.downloads = 0;
             appData.rating = 5.0;
             const { data, error } = await supabaseClient.from('apps').insert([appData]).select().single();
-            if (error) { showCustomModal('Error', error.message); return; }
-            apps.unshift(data);
-            showCustomModal('Success', 'Game published securely.');
+            if (error) { showCustomModal('Error', error.message); submitButton.disabled = false; return; }
+            if (data) apps.unshift(data);
+            showCustomModal('Success', 'Game published successfully.');
         }
         saveAppsToStorage();
         cancelEditMode();
@@ -449,8 +486,8 @@ function startEditApp(appId) {
     previewThumbnail(app.icon || '');
 
     document.getElementById('formHeaderIcon').className = 'fa-solid fa-pen-to-square';
-    document.getElementById('formMainTitle').innerText = 'Edit Game / App';
-    document.getElementById('formSubTitle').innerText = 'Modify your app details securely.';
+    document.getElementById('formMainTitle').innerText = 'Edit Game';
+    document.getElementById('formSubTitle').innerText = 'Modify your app details.';
     document.getElementById('submitBtnText').innerText = 'Update Game';
 
     closeAppModal();
@@ -462,9 +499,10 @@ function cancelEditMode() {
     document.getElementById('uploadForm').reset();
     document.getElementById('iconPreview').innerHTML = '<i class="fa-solid fa-image text-slate-400 text-sm"></i>';
     document.getElementById('formHeaderIcon').className = 'fa-solid fa-cloud-arrow-up';
-    document.getElementById('formMainTitle').innerText = 'Upload New Game / App';
-    document.getElementById('formSubTitle').innerText = 'Fill in your app details and publish it securely.';
+    document.getElementById('formMainTitle').innerText = 'Upload New Game';
+    document.getElementById('formSubTitle').innerText = 'Publish your web game or app.';
     document.getElementById('submitBtnText').innerText = 'Publish';
+    switchTab('store');
 }
 
 function deleteApp(appId) {
@@ -473,10 +511,7 @@ function deleteApp(appId) {
         if (!supabaseClient) return;
         try {
             const { error } = await supabaseClient.from('apps').delete().eq('id', appId);
-            if (error) {
-                showCustomModal('Permission Denied', error.message);
-                return;
-            }
+            if (error) { showCustomModal('Permission Denied', error.message); return; }
             apps = apps.filter(item => String(item.id) !== String(appId));
             saveAppsToStorage();
             renderApps();
@@ -484,61 +519,35 @@ function deleteApp(appId) {
             updateStats();
             closeAppModal();
             showCustomModal('Deleted', 'Game removed successfully.');
-        } catch (e) {
-            showCustomModal('Error', 'Failed to delete game.');
-        }
+        } catch (e) { showCustomModal('Error', 'Failed to delete game.'); }
     });
 }
 
 async function handleSupabaseSignUp() {
     const email = document.getElementById('authEmail').value.trim();
     const password = document.getElementById('authPassword').value;
-    if (!email || !password) {
-        showCustomModal('Error', 'कृपया ईमेल और पासवर्ड दोनों दर्ज करें।');
-        return;
-    }
-
+    if (!email || !password) { showCustomModal('Error', 'कृपया ईमेल और पासवर्ड दर्ज करें।'); return; }
     try {
         const { data, error } = await supabaseClient.auth.signUp({ email, password });
-        if (error) {
-            showCustomModal('Sign Up Failed', error.message);
-            return;
-        }
-        currentUser = data.user;
-        updateAuthUI(true);
-        closeAuthModal();
-        showCustomModal('Success', 'अकाउंट सफलतापूर्वक बन गया और लॉगिन हो गया!');
-    } catch (e) {
-        showCustomModal('Error', 'साइन-अप करने में समस्या आई।');
-    }
+        if (error) { showCustomModal('Sign Up Failed', error.message); return; }
+        if (data && data.user) { currentUser = data.user; updateAuthUI(true); closeAuthModal(); showCustomModal('Success', 'अकाउंट सफलतापूर्वक बन गया!'); }
+    } catch (e) { showCustomModal('Error', 'साइन-अप में समस्या आई।'); }
 }
 
 async function handleSupabaseSignIn() {
     const email = document.getElementById('authEmail').value.trim();
     const password = document.getElementById('authPassword').value;
-    if (!email || !password) {
-        showCustomModal('Error', 'कृपया ईमेल और पासवर्ड दोनों दर्ज करें।');
-        return;
-    }
-
+    if (!email || !password) { showCustomModal('Error', 'कृपया ईमेल और पासवर्ड दर्ज करें।'); return; }
     try {
         const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-        if (error) {
-            showCustomModal('Login Failed', error.message);
-            return;
-        }
-        currentUser = data.user;
-        updateAuthUI(true);
-        closeAuthModal();
-        showCustomModal('Success', 'सफलतापूर्वक लॉगिन हो गए!');
-    } catch (e) {
-        showCustomModal('Error', 'लॉगिन करने में समस्या आई।');
-    }
+        if (error) { showCustomModal('Login Failed', error.message); return; }
+        if (data && data.user) { currentUser = data.user; updateAuthUI(true); closeAuthModal(); showCustomModal('Success', 'सफलतापूर्वक लॉगिन हो गए!'); }
+    } catch (e) { showCustomModal('Error', 'लॉगिन में समस्या आई।'); }
 }
 
 async function openAuthModal() {
     if (currentUser) {
-        showConfirmModal('Logout', 'क्या आप अपने अकाउंट से लॉग आउट करना चाहते हैं?', async () => {
+        showConfirmModal('Logout', 'क्या आप लॉग आउट करना चाहते हैं?', async () => {
             await supabaseClient.auth.signOut();
             currentUser = null;
             updateAuthUI(false);
@@ -549,15 +558,13 @@ async function openAuthModal() {
     }
 }
 
-function closeAuthModal() {
-    document.getElementById('authModal').classList.add('hidden');
-}
+function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); }
 
 function renderFeatured() {
     const title = document.getElementById('featuredTitle');
     const description = document.getElementById('featuredDescription');
     if (!title || !description || !featuredApp) return;
-    title.innerText = featuredApp.name || 'MiniStore Games';
+    title.innerText = featuredApp.name || 'AuraVexis Portal';
     description.innerText = featuredApp.short_desc || 'Play your favorite games instantly.';
 }
 
@@ -596,12 +603,12 @@ function renderApps() {
         const icon = escapeHTML(app.icon);
         const shortDesc = escapeHTML(app.short_desc || '');
         const rating = Number(app.rating || 5.0).toFixed(1);
-
         const isOwner = currentUser && String(app.user_id) === String(currentUser.id);
+
         const adminControls = isOwner ? `
             <div class="flex items-center space-x-1">
-                <button onclick="startEditApp('${id}')" class="text-indigo-500 hover:text-indigo-700 p-1 transition" title="Edit Game"><i class="fa-solid fa-pen-to-square text-xs"></i></button>
-                <button onclick="deleteApp('${id}')" class="text-rose-500 hover:text-rose-700 p-1 transition" title="Delete Game"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                <button type="button" onclick="startEditApp('${id}')" class="text-indigo-500 hover:text-indigo-700 p-1 transition" title="Edit"><i class="fa-solid fa-pen-to-square text-xs"></i></button>
+                <button type="button" onclick="deleteApp('${id}')" class="text-rose-500 hover:text-rose-700 p-1 transition" title="Delete"><i class="fa-solid fa-trash-can text-xs"></i></button>
             </div>
         ` : '';
 
@@ -613,11 +620,11 @@ function renderApps() {
                         <span class="text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400">${category}</span>
                     </div>
                     <h3 onclick="openAppModal('${id}')" class="font-bold text-base text-slate-900 dark:text-slate-100 cursor-pointer hover:text-indigo-600 transition line-clamp-1">${name}</h3>
-                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-1.5">By ${developer}</p>
+                    <p class="text-[11px] text-slate-500 mb-1.5">By ${developer}</p>
                     <p class="text-xs text-slate-600 dark:text-slate-300 line-clamp-2 mb-3 h-8">${shortDesc}</p>
                 </div>
                 <div>
-                    <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-2.5 pt-2.5 border-t border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center justify-between text-xs text-slate-500 mb-2.5 pt-2.5 border-t border-slate-100 dark:border-slate-800">
                         <span class="flex items-center space-x-1">
                             <i class="fa-solid fa-star text-amber-400 text-xs"></i>
                             <span class="font-semibold text-slate-700 dark:text-slate-300 text-xs">${rating}</span>
@@ -625,8 +632,8 @@ function renderApps() {
                         ${adminControls}
                     </div>
                     <div class="flex items-center space-x-2">
-                        <button onclick="openAppModal('${id}')" class="flex-1 py-2 px-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold rounded-xl text-xs transition">Details</button>
-                        <button onclick="launchGame('${id}')" class="flex-1 py-2 px-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-xs transition shadow-sm flex items-center justify-center space-x-1">
+                        <button type="button" onclick="openAppModal('${id}')" class="flex-1 py-2 px-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 font-semibold rounded-xl text-xs transition">Details</button>
+                        <button type="button" onclick="launchGame('${id}')" class="flex-1 py-2 px-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-xs transition shadow-sm flex items-center justify-center space-x-1">
                             <i class="fa-solid fa-play text-[10px]"></i><span>Play</span>
                         </button>
                     </div>
@@ -675,20 +682,20 @@ function renderMyApps() {
                         <span class="text-[10px] font-semibold px-2.5 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400">${category}</span>
                     </div>
                     <h3 onclick="openAppModal('${id}')" class="font-bold text-base text-slate-900 dark:text-slate-100 cursor-pointer hover:text-indigo-600 transition line-clamp-1">${name}</h3>
-                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-1.5">By ${developer}</p>
+                    <p class="text-[11px] text-slate-500 mb-1.5">By ${developer}</p>
                     <p class="text-xs text-slate-600 dark:text-slate-300 line-clamp-2 mb-3 h-8">${shortDesc}</p>
                 </div>
                 <div>
-                    <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-2.5 pt-2.5 border-t border-slate-100 dark:border-slate-800">
-                        <span class="text-[11px] font-medium text-emerald-600 dark:text-emerald-400"><i class="fa-solid fa-circle-check mr-1"></i> Your Game</span>
+                    <div class="flex items-center justify-between text-xs text-slate-500 mb-2.5 pt-2.5 border-t border-slate-100 dark:border-slate-800">
+                        <span class="text-[11px] font-medium text-emerald-600"><i class="fa-solid fa-circle-check mr-1"></i> Your Game</span>
                         <div class="flex items-center space-x-1">
-                            <button onclick="startEditApp('${id}')" class="text-indigo-500 hover:text-indigo-700 p-1 transition" title="Edit Game"><i class="fa-solid fa-pen-to-square text-xs"></i></button>
-                            <button onclick="deleteApp('${id}')" class="text-rose-500 hover:text-rose-700 p-1 transition" title="Delete Game"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                            <button type="button" onclick="startEditApp('${id}')" class="text-indigo-500 hover:text-indigo-700 p-1 transition" title="Edit"><i class="fa-solid fa-pen-to-square text-xs"></i></button>
+                            <button type="button" onclick="deleteApp('${id}')" class="text-rose-500 hover:text-rose-700 p-1 transition" title="Delete"><i class="fa-solid fa-trash-can text-xs"></i></button>
                         </div>
                     </div>
                     <div class="flex items-center space-x-2">
-                        <button onclick="openAppModal('${id}')" class="flex-1 py-2 px-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold rounded-xl text-xs transition">Details</button>
-                        <button onclick="launchGame('${id}')" class="flex-1 py-2 px-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-xs transition shadow-sm flex items-center justify-center space-x-1">
+                        <button type="button" onclick="openAppModal('${id}')" class="flex-1 py-2 px-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 font-semibold rounded-xl text-xs transition">Details</button>
+                        <button type="button" onclick="launchGame('${id}')" class="flex-1 py-2 px-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-xs transition shadow-sm flex items-center justify-center space-x-1">
                             <i class="fa-solid fa-play text-[10px]"></i><span>Play</span>
                         </button>
                     </div>
@@ -726,8 +733,8 @@ function openAppModal(appId) {
     const isOwner = currentUser && String(app.user_id) === String(currentUser.id);
 
     const adminActionBtns = isOwner ? `
-        <button onclick="startEditApp('${id}')" class="py-2.5 px-3 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 font-semibold rounded-xl text-xs transition flex items-center space-x-1"><i class="fa-solid fa-pen-to-square"></i><span>Edit</span></button>
-        <button onclick="deleteApp('${id}')" class="py-2.5 px-3 bg-rose-50 dark:bg-rose-950/40 text-rose-600 font-semibold rounded-xl text-xs transition flex items-center space-x-1"><i class="fa-solid fa-trash-can"></i><span>Delete</span></button>
+        <button type="button" onclick="startEditApp('${id}')" class="py-2.5 px-3 bg-indigo-50 dark:bg-indigo-950 text-indigo-600 font-semibold rounded-xl text-xs transition flex items-center space-x-1"><i class="fa-solid fa-pen-to-square"></i><span>Edit</span></button>
+        <button type="button" onclick="deleteApp('${id}')" class="py-2.5 px-3 bg-rose-50 dark:bg-rose-950 text-rose-600 font-semibold rounded-xl text-xs transition flex items-center space-x-1"><i class="fa-solid fa-trash-can"></i><span>Delete</span></button>
     ` : '';
 
     modalBox.innerHTML = `
@@ -735,19 +742,19 @@ function openAppModal(appId) {
             <div class="flex items-center space-x-3.5">
                 <img src="${escapeHTML(app.icon)}" onerror="this.src='https://placehold.co/100x100/6366f1/ffffff?text=APP'" class="w-16 h-16 rounded-2xl object-cover shadow-md">
                 <div>
-                    <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400">${escapeHTML(app.category)}</span>
+                    <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-600">${escapeHTML(app.category)}</span>
                     <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100 mt-1">${escapeHTML(app.name)}</h2>
                     <p class="text-[11px] text-slate-500">By <span class="font-medium text-slate-700 dark:text-slate-300">${escapeHTML(app.developer)}</span> • Version ${escapeHTML(app.version || '1.0.0')}</p>
                 </div>
             </div>
-            <button onclick="closeAppModal()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition"><i class="fa-solid fa-xmark text-xs"></i></button>
+            <button type="button" onclick="closeAppModal()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 flex items-center justify-center"><i class="fa-solid fa-xmark text-xs"></i></button>
         </div>
         <div class="space-y-2 mb-6">
             <h4 class="font-bold text-xs text-slate-900 dark:text-slate-100">About the Game</h4>
             <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">${escapeHTML(app.full_desc || app.short_desc)}</p>
         </div>
         <div class="flex items-center space-x-3 pt-3 border-t border-slate-100 dark:border-slate-800">
-            <button onclick="launchGame('${id}')" class="flex-1 py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs sm:text-sm shadow-md transition flex items-center justify-center space-x-1.5">
+            <button type="button" onclick="launchGame('${id}')" class="flex-1 py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs sm:text-sm shadow-md transition flex items-center justify-center space-x-1.5">
                 <i class="fa-solid fa-play text-xs"></i><span>Play Game</span>
             </button>
             ${adminActionBtns}
@@ -762,12 +769,26 @@ async function launchGame(appId) {
     const app = apps.find(item => String(item.id) === String(appId));
     if (!app || !app.game_url) return;
     closeAppModal();
-    window.open(app.game_url, '_blank', 'noopener,noreferrer');
+
+    activeGameUrl = app.game_url;
+    document.getElementById('playerGameTitle').innerText = app.name || 'Game Portal';
+    document.getElementById('gameIframe').src = app.game_url;
+    document.getElementById('gamePlayerModal').classList.remove('hidden');
 }
 
-function openFeaturedGame() {
-    if (featuredApp) launchGame(featuredApp.id);
+function closeGamePlayer() {
+    document.getElementById('gamePlayerModal').classList.add('hidden');
+    document.getElementById('gameIframe').src = '';
+    activeGameUrl = '';
 }
+
+function openGameInNewTab() {
+    if (activeGameUrl) {
+        window.open(activeGameUrl, '_blank', 'noopener,noreferrer');
+    }
+}
+
+function openFeaturedGame() { if (featuredApp) launchGame(featuredApp.id); }
 
 function previewThumbnail(url) {
     const previewBox = document.getElementById('iconPreview');
@@ -787,7 +808,6 @@ function switchTab(tabName) {
     const store = document.getElementById('tab-store');
     const myGames = document.getElementById('tab-my-games');
     const upload = document.getElementById('tab-upload');
-    
     const storeBtn = document.getElementById('btn-store');
     const myGamesBtn = document.getElementById('btn-my-games');
     const uploadBtn = document.getElementById('btn-upload');
@@ -797,7 +817,7 @@ function switchTab(tabName) {
     myGames.classList.add('hidden');
     upload.classList.add('hidden');
 
-    const inactiveClass = 'px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700';
+    const inactiveClass = 'px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200';
     const activeClass = 'px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition flex items-center space-x-1.5 bg-indigo-600 text-white shadow-sm';
 
     storeBtn.className = inactiveClass;
@@ -809,12 +829,7 @@ function switchTab(tabName) {
         searchContainer.classList.remove('hidden');
         storeBtn.className = activeClass;
     } else if (tabName === 'my-games') {
-        if (!currentUser) {
-            openAuthModal();
-            store.classList.remove('hidden');
-            storeBtn.className = activeClass;
-            return;
-        }
+        if (!currentUser) { openAuthModal(); store.classList.remove('hidden'); storeBtn.className = activeClass; return; }
         myGames.classList.remove('hidden');
         searchContainer.classList.add('hidden');
         myGamesBtn.className = activeClass;
@@ -843,7 +858,7 @@ function toggleTheme() {
 function showCustomModal(title, message) {
     document.getElementById('modalTitle').innerText = title;
     document.getElementById('modalMessage').innerText = message;
-    document.getElementById('modalButtons').innerHTML = `<button onclick="closeCustomModal()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-xs transition">OK</button>`;
+    document.getElementById('modalButtons').innerHTML = `<button type="button" onclick="closeCustomModal()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-xs transition">OK</button>`;
     document.getElementById('customModal').classList.remove('hidden');
 }
 
@@ -852,17 +867,13 @@ function showConfirmModal(title, message, callback) {
     document.getElementById('modalTitle').innerText = title;
     document.getElementById('modalMessage').innerText = message;
     document.getElementById('modalButtons').innerHTML = `
-        <button onclick="closeCustomModal()" class="flex-1 py-2 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold rounded-xl text-xs transition">Cancel</button>
-        <button onclick="executeConfirm()" class="flex-1 py-2 bg-rose-600 hover:bg-rose-700 text-white font-semibold rounded-xl text-xs transition">Confirm</button>
+        <button type="button" onclick="closeCustomModal()" class="flex-1 py-2 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold rounded-xl text-xs transition">Cancel</button>
+        <button type="button" onclick="executeConfirm()" class="flex-1 py-2 bg-rose-600 hover:bg-rose-700 text-white font-semibold rounded-xl text-xs transition">Confirm</button>
     `;
     document.getElementById('customModal').classList.remove('hidden');
 }
 
-function closeCustomModal() {
-    document.getElementById('customModal').classList.add('hidden');
-    modalCallback = null;
-}
-
+function closeCustomModal() { document.getElementById('customModal').classList.add('hidden'); modalCallback = null; }
 async function executeConfirm() {
     const cb = modalCallback;
     document.getElementById('customModal').classList.add('hidden');
@@ -875,9 +886,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.documentElement.classList.add('dark');
         document.getElementById('theme-icon').className = 'fa-solid fa-sun text-sm';
     }
-    if (initializeSupabase()) {
-        await checkUserSession();
-    }
+    if (initializeSupabase()) { await checkUserSession(); }
     await loadGames();
 });
 </script>
